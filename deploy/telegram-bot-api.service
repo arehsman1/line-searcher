@@ -1,0 +1,28 @@
+[Unit]
+Description=Telegram Local Bot API Server
+After=network.target
+
+[Service]
+Type=simple
+User=linesearcher
+Group=linesearcher
+WorkingDirectory=/var/lib/telegram-bot-api
+EnvironmentFile=/opt/line-searcher/.env
+ExecStart=/usr/local/bin/telegram-bot-api \
+    --api-id=${API_ID} \
+    --api-hash=${API_HASH} \
+    --local \
+    --http-port=8081 \
+    --dir=/var/lib/telegram-bot-api \
+    --temp-dir=/tmp/telegram-bot-api \
+    --verbosity=1
+Restart=always
+RestartSec=3
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=telegram-bot-api
+
+LimitNOFILE=65535
+
+[Install]
+WantedBy=multi-user.target

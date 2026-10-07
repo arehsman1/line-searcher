@@ -1,0 +1,31 @@
+[Unit]
+Description=LINE SEARCHER Telegram Bot
+After=network.target telegram-bot-api.service
+Wants=telegram-bot-api.service
+
+[Service]
+Type=simple
+User=linesearcher
+Group=linesearcher
+WorkingDirectory=/opt/line-searcher
+EnvironmentFile=/opt/line-searcher/.env
+ExecStart=/opt/line-searcher/venv/bin/python -m app.main
+Restart=always
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=line-searcher
+
+# Security hardening
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/opt/line-searcher/data /opt/line-searcher/logs /var/lib/telegram-bot-api
+
+# Resource limits (tune per VPS)
+LimitNOFILE=65535
+# MemoryMax=4G
+
+[Install]
+WantedBy=multi-user.target

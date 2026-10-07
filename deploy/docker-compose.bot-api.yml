@@ -1,0 +1,23 @@
+# Optional: run Local Bot API Server via Docker
+# Usage: docker compose -f deploy/docker-compose.bot-api.yml up -d
+
+services:
+  telegram-bot-api:
+    image: aiogram/telegram-bot-api:latest
+    container_name: telegram-local-api
+    restart: unless-stopped
+    environment:
+      TELEGRAM_API_ID: ${API_ID}
+      TELEGRAM_API_HASH: ${API_HASH}
+      TELEGRAM_LOCAL: "1"
+    ports:
+      - "127.0.0.1:8081:8081"
+    volumes:
+      - bot-api-data:/var/lib/telegram-bot-api
+    command:
+      - --local
+      - --http-port=8081
+      - --dir=/var/lib/telegram-bot-api
+
+volumes:
+  bot-api-data:
